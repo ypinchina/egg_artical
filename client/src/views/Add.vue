@@ -12,23 +12,48 @@
 
 <script>
 
-import { Uploader, Field, CellGroup, Button } from 'vant'
+import { Uploader, Field, CellGroup, Button, Toast } from 'vant'
 export default {
   data() {
     return {
       fileList: [],
-      title: 'adadasd',
-      summary: 'qwrqwrqwrwqrqw',
-      content: 'rqw412341241241242141'
+      title: '',
+      summary: '',
+      content: '',
+      src: ''
     }
   },
   methods: {
     afterRead(file) {
-      console.log(file)
+      this.src = file.content
     },
     submit() {
       if (this.title && this.summary) {
-        console.log('success')
+        const data = {
+          title: this.title,
+          summary: this.summary,
+          src: this.src,
+          createTime: "2020-09-01:20:20",
+          content: this.content
+        }
+        fetch('/article/upload', {
+            body: JSON.stringify(data),
+            headers: {
+              'Content-type': 'application/json'
+            },
+            method: 'post'// *GET, POST, PUT, DELETE, etc.
+        }).then(res => res.json()).then(res => {
+          if(res.status === 200) {
+            this.$router.push({
+              path: '/'
+            })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        }) 
+      } else {
+        Toast.fail('不能输入为空')
       }
     }
   },
@@ -36,7 +61,8 @@ export default {
     [Uploader.name]: Uploader,
     [Field.name]: Field,
     [CellGroup.name]: CellGroup,
-    [Button.name]: Button
+    [Button.name]: Button,
+    [Toast.name]: Toast
   }
 }
 </script>

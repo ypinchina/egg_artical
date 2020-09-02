@@ -38,27 +38,14 @@ export default {
   },
   methods: {
     onLoad() {
-      setTimeout(() => {
-        this.loading = false
-        this.finished = true
-        this.list = [
-          {
-          id: 1,
-          src: 'https://img1.sycdn.imooc.com/szimg/5f3c866608d7a4e706000338-360-202.jpg',
-          summary: '小程序微课简介',
-          content: '神课再迭代，历时4年，学员20000+，始终与微信官方同步，缔造全网首屈一指的精品课程',
-          title: '微信小程序入门与实战-2020全新版',
-          createTime: '1999-07-10'
-          },{
-            id: 2,
-            title: '全面系统Python3.8入门+进阶',
-            summary: 'python微课简介',
-            src: 'https://img.mukewang.com/szimg/59b8a486000107fb05400300-360-202.jpg',
-            content: '目前任职架构师，曾任技术总监。精通技术架构设计，熟悉分布式/微服务系统设计开发。具有丰富的互联网项目经验，精通Java、Node.js、javascript等技术。尤其精通前端。 目前已开源： Cpage.js：Mvvm框架， ui-vue：基于vue2的UI框架， chen.js：dom操作框架。',
-            createTime: '2132-12-12'
-          }
-        ]
-      }, 1000)
+      fetch('/article/lists').then(res => res.json()).then(res => {
+        if(res.status === 200) {
+          this.list = res.data
+        } else {
+          console.log('buhashquiweqwe')
+          return
+        }
+      })
     },
     detailInfo(id) {
       this.$router.push({

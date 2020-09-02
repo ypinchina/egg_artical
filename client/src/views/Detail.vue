@@ -10,20 +10,28 @@
 </template>
 
 <script>
-
-
+import { Toast } from 'vant';
 export default {
+  components: {
+    [Toast.name]: Toast
+  },
   data() {
     return {
       detail: {
-          id: 1,
-          src: 'https://img1.sycdn.imooc.com/szimg/5f3c866608d7a4e706000338-360-202.jpg',
-          summary: '小程序微课简介',
-          content: '神课再迭代，历时4年，学员20000+，始终与微信官方同步，缔造全网首屈一指的精品课程',
-          title: '微信小程序入门与实战-2020全新版',
-          createTime: '1999-07-10'
       }
     }
+  },
+  created() {
+    console.log(this.$route.query)
+    fetch(`/article/detail?id=${this.$route.query.id}`).then(res => res.json()).then(res => {
+      if(res.status === 200) {
+        this.detail = res.data
+      } else {
+        Toast.fail('查询失败')
+      }
+    }).catch(err => {
+      console.error(err)
+    })
   }
 }
 </script>
@@ -45,6 +53,7 @@ export default {
 .detailArticle .content {
   text-indent: 2em;
   line-height: 20px;
+  margin-bottom: 30px;
 }
 .detailArticle .createTime {
   text-align: right;
